@@ -61,4 +61,6 @@ def test_startup_quiz_index(selenium):
     element.click()
     wait_new_tab(selenium)
 
+    
+
 
