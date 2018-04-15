@@ -18,10 +18,10 @@ def test_startup_open_smoke(selenium):
 	selenium.get('https://regulation.gov.ua')
 	element = selenium.find_element_by_link_text('Спробуй вже зараз!')
 	element.click()
-	wait_new_tab(selenium)
 
 	assert (selenium.current_url == 'https://regulation.gov.ua/startup' or
 		WebDriverWait(selenium, 2).until(EC.url_changes('https://regulation.gov.ua/startup')))
+	assert selenium.title == 'StartBusinessChallenge: покрокові інтерактивні інструкції як відкрити бізнес'
 
 
 def test_startup_quiz_start_smoke(selenium):
@@ -55,11 +55,15 @@ def test_startup_quiz_back(selenium):
 	WebDriverWait(selenium, 2).until(EC.staleness_of(button_element))
 	assert 'opacity-0' not in element.get_attribute("class")
 
-def test_startup_quiz_index(selenium):
-    selenium.get('https://regulation.gov.ua/startup')
-    element = selenium.find_element_by_link_text('Спробуй вже зараз!')
+def test_inflation_smoke(selenium):
+    selenium.get('https://regulation.gov.ua/')
+    element = selenium.find_element_by_css_selector('.page-content .text-white')
+    element = element.find_element_by_link_text('Спробуй вже зараз!')
     element.click()
     wait_new_tab(selenium)
+    assert (selenium.current_url == 'https://regulation.gov.ua/inflation' or
+		WebDriverWait(selenium, 2).until(EC.url_changes('https://regulation.gov.ua/inflation')))
+    assert selenium.title == 'Інфляційний барометр'
 
     
 

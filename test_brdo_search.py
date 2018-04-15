@@ -88,13 +88,3 @@ def test_brdo_search_index_item(selenium):
 	element = selenium.find_element_by_css_selector('li.index_item a')
 	WebDriverWait(selenium,2).until(EC.url_changes('https://regulation.gov.ua/search/закон/index_item'))
 	assert_text_found(selenium, 'закон')
-
-
-def test_brdo_search_catalogue(selenium):
-	selenium.get('https://regulation.gov.ua/search/закон/index_item')
-	element = selenium.find_element_by_css_selector('')
-	WebDriverWait(selenium,3).until(EC.url_changes(''))
-	assert_text_found(selenium, '')
-
-
-
