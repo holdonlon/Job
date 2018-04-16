@@ -39,7 +39,7 @@ def test_startup_quiz_end_smoke(selenium):
 	while selenium.find_elements_by_css_selector('.question-container button'):
 		element = random_element(selenium.find_elements_by_css_selector('.question-container button'))
 		element.click()
-		WebDriverWait(selenium, 2).until(EC.staleness_of(element))
+		WebDriverWait(selenium, 3).until(EC.staleness_of(element))
 
 	element = WebDriverWait(selenium, 4).until(
 		EC.presence_of_element_located(('css selector', 'a.toggle-startup'))
