@@ -1,3 +1,4 @@
+import pytest
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -22,7 +23,14 @@ def test_ias_login(selenium):
     wait_url(selenium, 'http://inspections.staging.brdo.com.ua/')
     
 
-def test_ias_plan_filter_code(selenium):
+@pytest.mark.parametrize("edr_code", [
+	'33231317',
+	'34004453',
+	'13318525',
+	'00691748',
+	'40511902',
+])
+def test_ias_plan_filter_code(selenium, edr_code):
 	selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
 	do_login(selenium)
 	wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
@@ -31,11 +39,11 @@ def test_ias_plan_filter_code(selenium):
 	assert len(elements) > 1
 
 	element = selenium.find_element_by_name('AnnualInspectionPlanned[code]')
-	element.send_keys('33231317')
+	element.send_keys(edr_code)
 	element = selenium.find_element_by_name('AnnualInspectionPlanned[activity_type]')
 	element.click()
 
 	elements = selenium.find_elements_by_css_selector('.table-responsive tbody tr')
 
 	element = elements[0].find_element_by_css_selector('td:nth-child(3) span')
-	assert element.text == '33231317'
+	assert element.text == edr_code
