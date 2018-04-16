@@ -63,7 +63,7 @@ def test_inflation_smoke(selenium):
     wait_new_tab(selenium)
     assert (selenium.current_url == 'https://regulation.gov.ua/inflation' or
 		WebDriverWait(selenium, 2).until(EC.url_changes('https://regulation.gov.ua/inflation')))
-    assert selenium.title == 'Інфляційний барометр'
+    assert WebDriverWait(selenium, 2).until(EC.title_is('Інфляційний барометр'))
 
     
 
