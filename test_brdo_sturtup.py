@@ -39,7 +39,31 @@ def test_startup_quiz_end_smoke(selenium):
 	while selenium.find_elements_by_css_selector('.question-container button'):
 		element = random_element(selenium.find_elements_by_css_selector('.question-container button'))
 		element.click()
-		WebDriverWait(selenium, 3).until(EC.staleness_of(element))
+		elements = selenium.find_elements_by_css_selector('.chose-city-startup li')
+		if elements:
+			element = random_element(elements)
+			element.click()
+		else:
+			WebDriverWait(selenium, 3).until(EC.staleness_of(element))
+			
+	element = WebDriverWait(selenium, 4).until(
+		EC.presence_of_element_located(('css selector', 'a.toggle-startup'))
+	)
+	assert element.text == 'Загальний опис'
+
+def test_startup_quiz_city_select_smoke(selenium):
+	selenium.get('https://regulation.gov.ua/startup/id4')
+
+	while selenium.find_elements_by_css_selector('.question-container button'):
+		element = random_element(selenium.find_elements_by_css_selector('.question-container button'))
+		element.click()
+
+		elements = selenium.find_elements_by_css_selector('.chose-city-startup li')
+		if elements:
+			element = random_element(elements)
+			element.click()
+		else:
+			WebDriverWait(selenium, 3).until(EC.staleness_of(element))
 
 	element = WebDriverWait(selenium, 4).until(
 		EC.presence_of_element_located(('css selector', 'a.toggle-startup'))
