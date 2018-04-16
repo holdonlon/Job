@@ -19,12 +19,10 @@ def wait_url(selenium, url):
 def test_ias_login(selenium):
     selenium.get('http://inspections.staging.brdo.com.ua/site/login')
     do_login(selenium)
-    wait_url(selenium, 'http://inspections.staging.brdo.com.ua')
+    wait_url(selenium, 'http://inspections.staging.brdo.com.ua/')
     
 
 def test_ias_plan(selenium):
 	selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
 	do_login(selenium)
 	wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
-	import time
-	time.sleep(5)
