@@ -91,6 +91,20 @@ def test_ias_plan_pdf(selenium):
     assert selenium.current_url.startswith('https://cdn.inspections.gov.ua/')
     assert selenium.current_url.endswith('.pdf')
 
+def test_ias_plan_xls(selenium):
+    selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned') 
+    do_login(selenium)
+    wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
+    element = selenium.find_element_by_link_text('xlsx')  
+    element.click()
+
+def test_ias_differences(selenium):
+    selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned') 
+    do_login(selenium)
+    wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
+    element = selenium.find_element_by_link_text('xlsx') 
+    element.click()
+
 
 @pytest.mark.parametrize("error_code,error_link,error_reason", [
 	('subject_close', 'Суб\'єкт в стадії припинення або припинив діяльність', 'Суб\'єкт господарювання знаходиться в стані припинення діяльності або припинив свою діяльність'),
@@ -108,3 +122,19 @@ def test_ias_plan_error(selenium, error_code, error_link, error_reason):
     	allert_element = element.find_element_by_css_selector('.icon-alert')
     	assert allert_element.get_attribute('data-add-tr') == error_reason
     	assert allert_element.get_attribute('data-original-title') == 'Помилка'
+
+@pytest.mark.parametrize('child,text,step', [
+	(2, 'Наказ','reason'),
+	(3, 'Результати','results'),
+])
+def test_ias_step(selenium, child, text, step):
+    selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')    
+    do_login(selenium)
+    wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')	
+    element = selenium.find_element_by_css_selector('button[data-id="annualinspectionplanned-step"]')
+    element.click()
+    element = selenium.find_element_by_css_selector('.open .dropdown-menu.open li:nth-child({})'.format(child))
+    element.click()
+    assert 'AnnualInspectionPlanned%5Bstep%5D={}'.format(step) in selenium.current_url
+    for element in selenium.find_elements_by_css_selector('.table-responsive tbody tr td:nth-child(9)'):
+       assert text in element.text

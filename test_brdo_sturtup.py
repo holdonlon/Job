@@ -44,8 +44,8 @@ def test_startup_quiz_end_smoke(selenium):
 			element = random_element(elements)
 			element.click()
 		else:
-			WebDriverWait(selenium, 3).until(EC.staleness_of(element))
-			
+			WebDriverWait(selenium, 4).until(EC.staleness_of(element))
+
 	element = WebDriverWait(selenium, 4).until(
 		EC.presence_of_element_located(('css selector', 'a.toggle-startup'))
 	)
@@ -76,7 +76,7 @@ def test_startup_quiz_back(selenium):
 	assert 'opacity-0' in element.get_attribute("class")
 	button_element = selenium.find_element_by_css_selector('.question-container button')
 	button_element.click()
-	WebDriverWait(selenium, 2).until(EC.staleness_of(button_element))
+	WebDriverWait(selenium, 4).until(EC.staleness_of(button_element))
 	assert 'opacity-0' not in element.get_attribute("class")
 
 def test_inflation_smoke(selenium):
