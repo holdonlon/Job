@@ -12,42 +12,42 @@ def test_ias_login(selenium):
 
 
 def enter_code(selenium, edr_code):
-	element = selenium.find_element_by_name('AnnualInspectionPlanned[code]')
-	element.send_keys(edr_code)
-	element = selenium.find_element_by_name('AnnualInspectionPlanned[activity_type]')
-	element.click()
+    url = selenium.current_url
+    element = selenium.find_element_by_name('AnnualInspectionPlanned[code]')
+    element.send_keys(edr_code)
+    element = selenium.find_element_by_name('AnnualInspectionPlanned[activity_type]')
+    element.click()
+    WebDriverWait(selenium, 20).until(EC.url_changes(url))
 
+
+SELECTED_EDR = [
+    '31979894',
+    '2790508067',
+    '00378000',
+    '14321216',
+    '2497005551',
+]
     
 
-@pytest.mark.parametrize("edr_code", [
-	'33231317',
-	'34004453',
-	'13318525',
-	'00691748',
-	'40511902',
-])
+@pytest.mark.parametrize("edr_code", SELECTED_EDR)
 def test_ias_plan_filter_code(selenium, edr_code):
-	selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
-	do_login(selenium)
-	wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
+    selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
+    do_login(selenium)
+    wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
+    WebDriverWait(selenium, 4).until(
+        EC.presence_of_element_located(('css selector', '.table-responsive tbody tr'))
+    )
+    elements = selenium.find_elements_by_css_selector('.table-responsive tbody tr')
+    assert len(elements) > 1
 
-	elements = selenium.find_elements_by_css_selector('.table-responsive tbody tr')
-	assert len(elements) > 1
+    enter_code(selenium, edr_code)
 
-	enter_code(selenium, edr_code)
+    elements = selenium.find_elements_by_css_selector('.table-responsive tbody tr')
 
-	elements = selenium.find_elements_by_css_selector('.table-responsive tbody tr')
+    element = elements[0].find_element_by_css_selector('td:nth-child(3) span')
+    assert element.text == edr_code
 
-	element = elements[0].find_element_by_css_selector('td:nth-child(3) span')
-	assert element.text == edr_code
-
-@pytest.mark.parametrize("edr_code", [
-	'33231317',
-	'34004453',
-	'13318525',
-	'00691748',
-	'40511902',
-])
+@pytest.mark.parametrize("edr_code", SELECTED_EDR)
 def test_ias_plan_card_view(selenium, edr_code):
     selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
     do_login(selenium)
@@ -56,20 +56,21 @@ def test_ias_plan_card_view(selenium, edr_code):
     element = selenium.find_element_by_css_selector('.table_action_btn.icon-details')
     element.click()
     assert selenium.current_url.startswith('http://inspections.staging.brdo.com.ua/inspection/view?id=')
-    element = selenium.find_element_by_css_selector('.result_table_mobile_panel tr:nth-child(3) td:nth-child(2)')
+    element = selenium.find_element_by_css_selector('.result_table_mobile_panel tr:nth-child(7) td:nth-child(2)')
     assert element.text == edr_code
  
-def test_ias_plan_card_edit(selenium, edr_code='33231317'):
+def test_ias_plan_card_edit(selenium, edr_code=SELECTED_EDR[0]):
 	selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
 	do_login(selenium)
 	wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
 	enter_code(selenium, edr_code)
 	element = selenium.find_element_by_css_selector('.table_action_btn.icon-pencil')
 	element.click()
-	assert selenium.current_url.startswith('http://inspections.staging.brdo.com.ua/inspection/update-all?id=')
+	assert selenium.current_url.startswith('http://inspections.staging.brdo.com.ua/inspection/parts?id=')
 	element = selenium.find_element_by_css_selector('.page_title')
-	assert 'Оновити дані про перевірку' in element.text
+	assert 'Оновлення інформації про перевірку' in element.text
 
+@pytest.mark.skip(reason="removed after update")
 def test_ias_plan_pdf(selenium):
     selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
     do_login(selenium)
@@ -79,6 +80,7 @@ def test_ias_plan_pdf(selenium):
     assert selenium.current_url.startswith('https://cdn.inspections.gov.ua/')
     assert selenium.current_url.endswith('.pdf')
 
+@pytest.mark.skip(reason="removed after update")
 def test_ias_plan_xls(selenium):
     selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned') 
     do_login(selenium)
@@ -86,6 +88,7 @@ def test_ias_plan_xls(selenium):
     element = selenium.find_element_by_link_text('xlsx')  
     element.click()
 
+@pytest.mark.skip(reason="removed after update")
 def test_ias_differences(selenium):
     selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned') 
     do_login(selenium)

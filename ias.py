@@ -12,6 +12,5 @@ def do_login(selenium):
 
 def wait_url(selenium, url):
 	assert (selenium.current_url == url or
-		WebDriverWait(selenium, 5).until(EC.url_to_be(url)))
-	print('ur', selenium.current_url, url)
+		WebDriverWait(selenium, 10).until(EC.url_to_be(url)))
 	assert selenium.current_url == url
