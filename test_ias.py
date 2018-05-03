@@ -26,6 +26,11 @@ def test_ias_login(selenium):
     do_login(selenium)
     wait_url(selenium, 'http://inspections.staging.brdo.com.ua/')
 
+@pytest.mark.skip(reason='ticket IAS-123')
+def test_ias_login_redirect(selenium):
+    selenium.get('http://inspections.staging.brdo.com.ua/inspection/planned')
+    do_login(selenium)
+    wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
 
 def enter_code(selenium, edr_code):
     url = selenium.current_url
