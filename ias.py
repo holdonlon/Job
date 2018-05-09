@@ -1,3 +1,4 @@
+import urllib.parse
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -11,6 +12,22 @@ def do_login(selenium):
 
 
 def wait_url(selenium, url):
-	assert (selenium.current_url == url or
-		WebDriverWait(selenium, 10).until(EC.url_to_be(url)))
-	assert selenium.current_url == url
+    assert (selenium.current_url == url or
+        WebDriverWait(selenium, 10).until(EC.url_to_be(url)))
+    assert selenium.current_url == url
+
+
+def open_login(selenium, url):
+    selenium.get(url)
+    do_login(selenium)
+    # IAS-123 wait_url(selenium, url)
+    selenium.get(url)
+
+
+def filter_by(selenium, input_name, value):
+    table_element = selenium.find_element_by_css_selector('.table-bordered')
+    element = selenium.find_element_by_name(input_name)
+    element.send_keys(value)
+    table_element.click()
+    WebDriverWait(selenium, 4).until(EC.staleness_of(table_element))
+    assert urllib.parse.urlencode({input_name: value}) in selenium.current_url
