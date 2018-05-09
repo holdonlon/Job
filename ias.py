@@ -30,4 +30,4 @@ def filter_by(selenium, input_name, value):
     element.send_keys(value)
     table_element.click()
     WebDriverWait(selenium, 4).until(EC.staleness_of(table_element))
-    assert urllib.parse.urlencode({input_name: value}) in selenium.current_url
+    assert urllib.parse.urlencode({input_name: value}).replace('+', '%20') in selenium.current_url
