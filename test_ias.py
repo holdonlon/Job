@@ -27,9 +27,9 @@ def test_ias_login_redirect(selenium):
     wait_url(selenium, 'http://inspections.staging.brdo.com.ua/inspection/planned')
 
 SELECTED_EDR = [
-    '31979894',
-    '13318525',
-    '00691470',
+    '0228109',
+    '04058746',
+    '04058829',
 ]
     
 

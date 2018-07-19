@@ -7,7 +7,7 @@ from ias import do_login, wait_url, open_login, filter_by
 
 def table_size(selenium):
     element = selenium.find_element_by_css_selector('.grid-view b:nth-child(2)')
-    return int(element.text.replace(' ', ''))
+    return int(element.text.replace(' ', '').replace(',', ''))
 
 
 @pytest.mark.parametrize("edr_code", [
@@ -76,11 +76,11 @@ def test_ias_subject_name_many(selenium, name):
 @pytest.mark.parametrize("subject", [
     {
         'Subject[code]': '37580028',
-        'Subject[full_name]': 'КОМУНАЛЬНА УСТАНОВА "МОГИЛІВ-ПОДІЛЬСЬКИЙ РАЙОННИЙ МЕДИЧНИЙ ЦЕНТР ПЕРВИННОЇ МЕДИКО-САНІТАРНОЇ ДОПОМОГИ"',
-        'Subject[short_name]': 'КУ "МОГИЛІВ-ПОДІЛЬСЬКИЙ РМЦПМСД"',
-        'Subject[location]': '24000, Вінницька обл., місто Могилів-Подільський, ВУЛИЦЯ ПОЛТАВСЬКА, будинок 89, корпус 2',
+        'Subject[full_name]': 'КОМУНАЛЬНЕ НЕКОМЕРЦІЙНЕ ПІДПРИЄМСТВО "МОГИЛІВ-ПОДІЛЬСЬКИЙ РАЙОННИЙ МЕДИЧНИЙ ЦЕНТР ПЕРВИННОЇ МЕДИКО-САНІТАРНОЇ ДОПОМОГИ" МОГИЛІВ-ПОДІЛЬСЬКОЇ РАЙОННОЇ РАДИ',
+        'Subject[short_name]': 'КНП "МОГИЛІВ-ПОДІЛЬСЬКИЙ РМЦ ПМСД" МОГИЛІВ-ПОДІЛЬСЬКОЇ РАЙОННОЇ РАДИ',
+        'Subject[location]': '24000, Вінницька обл., місто Могилів-Подільський, ВУЛИЦЯ ПОЛТАВСЬКА, будинок 89/2',
         'Subject[ceo_name]': 'Цибульчак Євдокія Артемівна',
-        'Subject[status]': 'в стані припинення',
+        'Subject[status]': 'зареєстровано',
 
     }
 ])
@@ -101,6 +101,8 @@ def test_ias_subject_add(selenium, subject):
         element = selenium.find_element_by_name(name)
         assert element.get_attribute('value') == value
 
+
+@pytest.mark.skip(reason='ticket IAS-257')
 def test_ias_subject_add_error(selenium):   
     open_login(selenium,'http://inspections.staging.brdo.com.ua/subject/add')
     element = selenium.find_element_by_name('SubjectAdd[code]')

@@ -34,10 +34,10 @@ def test_ias_unplanned_create(selenium):
     element.click()
     assert selenium.current_url == 'http://inspections.staging.brdo.com.ua/inspection/create'  
 
-def test_ias_unplanned_card_edit(selenium, edr_code='2140703638'):
+def test_ias_unplanned_card_edit(selenium, edr_code='30019801'):
     open_login(selenium, 'http://inspections.staging.brdo.com.ua/inspection/unplanned')
     enter_code(selenium, edr_code)
-    assert 'AnnualInspectionUnplanned%5Bcode%5D=2140703638' in selenium.current_url
+    assert ('AnnualInspectionUnplanned%5Bcode%5D=' + edr_code) in selenium.current_url
     element = selenium.find_element_by_css_selector('.table_action_btn.icon-pencil')
     element.click()
     assert selenium.current_url.startswith('http://inspections.staging.brdo.com.ua/inspection/update?id=')
